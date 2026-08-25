@@ -1,0 +1,903 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        CareerMatch AI - Results
+    </title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+
+<body>
+
+
+<!-- ================================================= -->
+<!-- HEADER -->
+<!-- ================================================= -->
+
+<header class="header">
+
+    <h1>
+        CareerMatch AI
+    </h1>
+
+    <p class="tagline">
+        Your Personalized Career Analysis
+    </p>
+
+</header>
+
+
+
+<!-- ================================================= -->
+<!-- OVERALL RESUME SCORE -->
+<!-- ================================================= -->
+
+<div class="card score-card">
+
+    <h2>
+        📊 Overall Resume Score
+    </h2>
+
+    <div class="score-container">
+
+        <div class="score-number">
+            {{ resume_score }}
+            <span>/100</span>
+        </div>
+
+        <div class="score-label">
+
+            {% if resume_score >= 80 %}
+
+                🌟 Excellent Resume
+
+            {% elif resume_score >= 60 %}
+
+                👍 Good Resume
+
+            {% elif resume_score >= 40 %}
+
+                📈 Needs Improvement
+
+            {% else %}
+
+                🛠️ Needs More Work
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+    <div class="progress">
+
+        <div class="progress-bar"
+             style="width: {{ resume_score }}%;">
+        </div>
+
+    </div>
+
+
+    <p class="score-description">
+
+        This score is based on your detected technical skills
+        and how well they match the recommended career paths.
+
+    </p>
+
+</div>
+
+
+
+<!-- ================================================= -->
+<!-- RESUME STRENGTHS -->
+<!-- ================================================= -->
+
+<div class="card">
+
+    <h2>
+        💪 Resume Strengths
+    </h2>
+
+
+    {% if strengths %}
+
+        <div class="strength-list">
+
+            {% for strength in strengths %}
+
+                <div class="strength-item">
+
+                    <span class="check-icon">
+                        ✓
+                    </span>
+
+                    <span>
+                        {{ strength }}
+                    </span>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    {% else %}
+
+        <p>
+            No specific strengths detected.
+        </p>
+
+    {% endif %}
+
+</div>
+
+
+
+<!-- ================================================= -->
+<!-- DETECTED SKILLS -->
+<!-- ================================================= -->
+
+<div class="card">
+
+    <h2>
+        🧠 Detected Skills
+    </h2>
+
+
+    {% if skills %}
+
+        <div class="skills">
+
+            {% for skill in skills %}
+
+                <span class="skill">
+                    {{ skill }}
+                </span>
+
+            {% endfor %}
+
+        </div>
+
+    {% else %}
+
+        <p>
+            No matching skills were detected.
+        </p>
+
+    {% endif %}
+
+</div>
+
+
+
+<!-- ================================================= -->
+<!-- GITHUB PROFILE ANALYSIS -->
+<!-- ================================================= -->
+
+<div class="card github-card">
+
+    <h2>
+        🐙 GitHub Profile Analysis
+    </h2>
+
+
+    {% if github_data and github_data.found %}
+
+
+        <!-- GitHub Profile -->
+
+        <div class="github-profile">
+
+            <div class="github-profile-header">
+
+                <div>
+
+                    <h3>
+                        {% if github_data.name %}
+
+                            {{ github_data.name }}
+
+                        {% else %}
+
+                            @{{ github_data.username }}
+
+                        {% endif %}
+                    </h3>
+
+                    <p class="github-username">
+                        @{{ github_data.username }}
+                    </p>
+
+                </div>
+
+
+                <a href="{{ github_data.profile_url }}"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="github-button">
+
+                    View GitHub Profile ↗
+
+                </a>
+
+            </div>
+
+
+            {% if github_data.bio %}
+
+                <p class="github-bio">
+                    {{ github_data.bio }}
+                </p>
+
+            {% endif %}
+
+        </div>
+
+
+
+        <!-- GitHub Statistics -->
+
+        <div class="github-stats">
+
+
+            <div class="github-stat">
+
+                <span class="github-stat-number">
+                    {{ github_data.repositories | length }}
+                </span>
+
+                <span class="github-stat-label">
+                    Projects Analyzed
+                </span>
+
+            </div>
+
+
+            <div class="github-stat">
+
+                <span class="github-stat-number">
+                    {{ github_data.public_repos }}
+                </span>
+
+                <span class="github-stat-label">
+                    Public Repositories
+                </span>
+
+            </div>
+
+
+            <div class="github-stat">
+
+                <span class="github-stat-number">
+                    {{ github_data.total_stars }}
+                </span>
+
+                <span class="github-stat-label">
+                    Total Stars
+                </span>
+
+            </div>
+
+
+            <div class="github-stat">
+
+                <span class="github-stat-number">
+                    {{ github_data.followers }}
+                </span>
+
+                <span class="github-stat-label">
+                    Followers
+                </span>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- Programming Languages -->
+
+        {% if github_data.languages %}
+
+            <div class="github-section">
+
+                <h3>
+                    💻 Programming Languages Found
+                </h3>
+
+
+                <div class="skills">
+
+                    {% for language in github_data.languages %}
+
+                        <span class="skill github-language">
+                            {{ language }}
+                        </span>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+        {% endif %}
+
+
+
+        <!-- Topics -->
+
+        {% if github_data.topics %}
+
+            <div class="github-section">
+
+                <h3>
+                    🏷️ Project Topics
+                </h3>
+
+
+                <div class="skills">
+
+                    {% for topic in github_data.topics %}
+
+                        <span class="skill github-topic">
+                            {{ topic }}
+                        </span>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+        {% endif %}
+
+
+
+        <!-- GitHub Insights -->
+
+        {% if github_insights %}
+
+            <div class="github-insights">
+
+                <h3>
+                    💡 GitHub Insights
+                </h3>
+
+
+                {% for insight in github_insights %}
+
+                    <div class="github-insight">
+
+                        <span>
+                            💡
+                        </span>
+
+                        <span>
+                            {{ insight }}
+                        </span>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        {% endif %}
+
+
+
+        <!-- Projects -->
+
+        <div class="github-section">
+
+            <h3>
+                📂 Projects Found on GitHub
+            </h3>
+
+
+            {% if github_data.repositories %}
+
+                {% for repo in github_data.repositories %}
+
+                    <div class="github-repository">
+
+
+                        <div class="repository-header">
+
+                            <h4>
+                                {{ repo.name }}
+                            </h4>
+
+
+                            <span class="repository-stars">
+                                ⭐ {{ repo.stars }}
+                            </span>
+
+                        </div>
+
+
+                        {% if repo.description %}
+
+                            <p class="repository-description">
+                                {{ repo.description }}
+                            </p>
+
+                        {% else %}
+
+                            <p class="repository-description">
+                                No project description provided.
+                            </p>
+
+                        {% endif %}
+
+
+
+                        <!-- Repository Languages -->
+
+                        {% if repo.languages %}
+
+                            <div class="repository-tags">
+
+                                {% for language in repo.languages %}
+
+                                    <span class="repository-tag">
+                                        {{ language }}
+                                    </span>
+
+                                {% endfor %}
+
+                            </div>
+
+                        {% endif %}
+
+
+
+                        <!-- Repository Topics -->
+
+                        {% if repo.topics %}
+
+                            <div class="repository-tags">
+
+                                {% for topic in repo.topics %}
+
+                                    <span class="repository-topic">
+                                        #{{ topic }}
+                                    </span>
+
+                                {% endfor %}
+
+                            </div>
+
+                        {% endif %}
+
+
+
+                        <!-- Repository Link -->
+
+                        {% if repo.url %}
+
+                            <a href="{{ repo.url }}"
+                               target="_blank"
+                               rel="noopener noreferrer"
+                               class="repository-link">
+
+                                View Project on GitHub ↗
+
+                            </a>
+
+                        {% endif %}
+
+                    </div>
+
+                {% endfor %}
+
+            {% else %}
+
+                <p>
+                    No public repositories were found.
+                </p>
+
+            {% endif %}
+
+        </div>
+
+
+    {% elif github_username %}
+
+
+        <!-- GitHub Username Found But Profile Failed -->
+
+        <div class="github-warning">
+
+            <h3>
+                ⚠️ GitHub Profile Could Not Be Analyzed
+            </h3>
+
+            <p>
+                We detected GitHub username
+                <strong>@{{ github_username }}</strong>
+                in your resume, but the public GitHub profile
+                could not be retrieved.
+            </p>
+
+            <p>
+                Please check that the GitHub username or profile
+                URL is correct and publicly accessible.
+            </p>
+
+        </div>
+
+
+    {% else %}
+
+
+        <!-- No GitHub Profile -->
+
+        <div class="github-empty">
+
+            <div class="github-empty-icon">
+                🐙
+            </div>
+
+            <h3>
+                No GitHub Profile Detected
+            </h3>
+
+            <p>
+                We couldn't find a GitHub profile link in your resume.
+            </p>
+
+            <p>
+                Adding your GitHub profile can help employers
+                see your real-world projects and coding experience.
+            </p>
+
+        </div>
+
+    {% endif %}
+
+</div>
+
+
+
+<!-- ================================================= -->
+<!-- BEST CAREER MATCH -->
+<!-- ================================================= -->
+
+{% if careers %}
+
+    <div class="card best-career-card">
+
+        <h2>
+            🏆 Best Career Match
+        </h2>
+
+
+        <div class="career">
+
+
+            <!-- Career Header -->
+
+            <div class="career-header">
+
+                <h3>
+                    🥇 {{ careers[0].career }}
+                </h3>
+
+                <strong>
+                    {{ careers[0].score }}%
+                </strong>
+
+            </div>
+
+
+            <!-- Progress -->
+
+            <div class="progress">
+
+                <div class="progress-bar"
+                     style="width: {{ careers[0].score }}%;">
+                </div>
+
+            </div>
+
+
+            <!-- Description -->
+
+            <p>
+
+                <strong>
+                    💼 About this Career:
+                </strong>
+
+                {{ careers[0].info.description }}
+
+            </p>
+
+
+            <!-- Matched Skills -->
+
+            <p class="career-detail">
+
+                <strong>
+                    ✅ Your Matching Skills:
+                </strong>
+
+                {% if careers[0].skills %}
+
+                    {{ careers[0].skills | join(", ") }}
+
+                {% else %}
+
+                    No matching skills
+
+                {% endif %}
+
+            </p>
+
+
+            <!-- Missing Skills -->
+
+            <p class="career-detail">
+
+                <strong>
+                    📚 Skills to Improve:
+                </strong>
+
+                {% if careers[0].missing %}
+
+                    {{ careers[0].missing | join(", ") }}
+
+                {% else %}
+
+                    🎉 You have all the required skills!
+
+                {% endif %}
+
+            </p>
+
+
+            <!-- Recommended Skills -->
+
+            <p class="career-detail">
+
+                <strong>
+                    🚀 Recommended Skills to Learn:
+                </strong>
+
+                {{ careers[0].info.recommended | join(", ") }}
+
+            </p>
+
+        </div>
+
+    </div>
+
+{% endif %}
+
+
+
+<!-- ================================================= -->
+<!-- IMPROVEMENT SUGGESTIONS -->
+<!-- ================================================= -->
+
+<div class="card suggestion-card">
+
+    <h2>
+        💡 Resume Improvement Suggestions
+    </h2>
+
+
+    {% if suggestions %}
+
+        <div class="suggestion-list">
+
+            {% for suggestion in suggestions %}
+
+                <div class="suggestion-item">
+
+                    <span class="suggestion-icon">
+                        💡
+                    </span>
+
+                    <span>
+                        {{ suggestion }}
+                    </span>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    {% else %}
+
+        <p>
+            Your resume looks good. Keep improving your skills!
+        </p>
+
+    {% endif %}
+
+</div>
+
+
+
+<!-- ================================================= -->
+<!-- ALL CAREER RECOMMENDATIONS -->
+<!-- ================================================= -->
+
+<div class="card">
+
+    <h2>
+        🎯 Career Recommendations
+    </h2>
+
+
+    {% for career in careers %}
+
+        <div class="career">
+
+
+            <!-- Career Name -->
+
+            <div class="career-header">
+
+                <h3>
+
+                    {% if loop.first %}
+
+                        🥇
+
+                    {% endif %}
+
+                    {{ career.career }}
+
+                </h3>
+
+
+                <strong>
+                    {{ career.score }}%
+                </strong>
+
+            </div>
+
+
+            <!-- Progress -->
+
+            <div class="progress">
+
+                <div class="progress-bar"
+                     style="width: {{ career.score }}%;">
+                </div>
+
+            </div>
+
+
+            <!-- Career Description -->
+
+            <p>
+
+                <strong>
+                    💼 About:
+                </strong>
+
+                {{ career.info.description }}
+
+            </p>
+
+
+            <!-- Matched Skills -->
+
+            <p class="career-detail">
+
+                <strong>
+                    ✅ Matched Skills:
+                </strong>
+
+                {% if career.skills %}
+
+                    {{ career.skills | join(", ") }}
+
+                {% else %}
+
+                    No matching skills
+
+                {% endif %}
+
+            </p>
+
+
+            <!-- Missing Skills -->
+
+            <p class="career-detail">
+
+                <strong>
+                    📚 Skills to Improve:
+                </strong>
+
+                {% if career.missing %}
+
+                    {{ career.missing | join(", ") }}
+
+                {% else %}
+
+                    No missing skills
+
+                {% endif %}
+
+            </p>
+
+
+            <!-- Recommended Skills -->
+
+            <p class="career-detail">
+
+                <strong>
+                    🚀 Recommended Skills:
+                </strong>
+
+                {{ career.info.recommended | join(", ") }}
+
+            </p>
+
+
+        </div>
+
+    {% endfor %}
+
+</div>
+
+
+
+<!-- ================================================= -->
+<!-- ANALYZE ANOTHER RESUME -->
+<!-- ================================================= -->
+
+<div class="action-container">
+
+    <a href="/"
+       class="back-button">
+
+        ← Analyze Another Resume
+
+    </a>
+
+</div>
+
+
+
+<!-- ================================================= -->
+<!-- FOOTER -->
+<!-- ================================================= -->
+
+<footer>
+
+    <p>
+        © 2026 CareerMatch AI
+    </p>
+
+    <p>
+        AI-Powered Career Guidance
+    </p>
+
+</footer>
+
+
+</body>
+
+</html>
+```

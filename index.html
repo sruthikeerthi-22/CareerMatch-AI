@@ -1,0 +1,133 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>CareerMatch AI</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+
+<body>
+
+<div class="container">
+
+    <!-- Header -->
+    <header class="header">
+
+        <h1>CareerMatch AI</h1>
+
+        <p class="tagline">
+            Find the career path that matches your skills.
+        </p>
+
+    </header>
+
+
+    <!-- Resume Upload Card -->
+    <div class="card">
+
+        <h2>📄 Upload Your Resume</h2>
+
+        <p class="description">
+            Upload your resume in PDF format and let CareerMatch AI
+            analyze your skills and suggest suitable career paths.
+        </p>
+
+
+        <!-- Upload Form -->
+        <form action="/upload"
+              method="POST"
+              enctype="multipart/form-data">
+
+            <div class="upload-area">
+
+                <p class="upload-title">
+                    Select your resume
+                </p>
+
+                <p class="upload-info">
+                    Only PDF files are supported
+                </p>
+
+                <input
+                    type="file"
+                    name="resume"
+                    accept="application/pdf,.pdf"
+                    required
+                >
+
+            </div>
+
+
+            <button type="submit">
+                Analyze Resume 🚀
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <!-- Features -->
+    <div class="features">
+
+        <div class="feature">
+
+            <h3>📄 Resume Analysis</h3>
+
+            <p>
+                Extract important information and skills from your resume.
+            </p>
+
+        </div>
+
+
+        <div class="feature">
+
+            <h3>🤖 AI Matching</h3>
+
+            <p>
+                Match your skills with suitable career opportunities.
+            </p>
+
+        </div>
+
+
+        <div class="feature">
+
+            <h3>🎯 Career Suggestions</h3>
+
+            <p>
+                Get personalized career recommendations based on your profile.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- Footer -->
+    <footer>
+
+        <p>
+            © 2026 CareerMatch AI | AI-Powered Career Guidance
+        </p>
+
+    </footer>
+
+</div>
+
+</body>
+
+</html>
+```
